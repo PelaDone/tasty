@@ -13,9 +13,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
-      className="bg-white rounded-xl shadow-lg overflow-hidden"
+      className="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col"
     >
-      <div className="relative h-48">
+      <div className="relative h-48 sm:h-56">
         <img
           src={recipe.imageUrl}
           alt={recipe.title}
@@ -32,9 +32,9 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         </div>
       </div>
       
-      <div className="p-4">
+      <div className="p-4 flex-1 flex flex-col">
         <h3 className="text-xl font-semibold mb-2">{recipe.title}</h3>
-        <p className="text-gray-600 text-sm mb-4">{recipe.description}</p>
+        <p className="text-gray-600 text-sm mb-4 flex-1">{recipe.description}</p>
         
         <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
@@ -58,4 +58,4 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       </div>
     </motion.div>
   );
-}
+};
