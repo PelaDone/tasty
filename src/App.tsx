@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { CreateRecipe } from './pages/CreateRecipe';
+import RecipeList from './components/RecipeList';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
                 </h2>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                  {/* Recipe cards will be populated from Supabase */}
+                  <RecipeList />
                 </div>
               </main>
             } />
