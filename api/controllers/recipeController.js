@@ -1,4 +1,5 @@
-import { RecipeService } from '../services/recipeService.js';
+// api/controllers/recipeController.js
+import RecipeService from '../services/recipeService.js';
 
 export class RecipeController {
   constructor() {

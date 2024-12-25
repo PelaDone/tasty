@@ -1,4 +1,5 @@
-export class RecipeService {
+// api/services/RecipeService.js
+class RecipeService {
   constructor(baseUrl = 'http://localhost:3000/api/recipes') {
     this.baseUrl = baseUrl;
   }
@@ -57,3 +58,5 @@ export class RecipeService {
     return response.json();
   }
 }
+
+export default RecipeService;

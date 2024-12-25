@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { RecipeService } from '../../api/services/RecipeService.js';
+import RecipeService from '../../api/services/RecipeService';
 
 function RecipeList() {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<any[]>([]);
   const recipeService = new RecipeService();
 
   useEffect(() => {
-    recipeService.getAllRecipes().then(setRecipes);
+    recipeService.getAllRecipes().then(setRecipes).catch(console.error);
   }, []);
 
   return (
