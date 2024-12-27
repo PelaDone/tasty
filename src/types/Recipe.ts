@@ -1,3 +1,9 @@
+export interface Author {
+  id: string;
+  name: string;
+  avatar?: string;
+}
+
 export interface Recipe {
   id: string;
   title: string;
@@ -7,9 +13,8 @@ export interface Recipe {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   ingredients: string[];
   instructions: string[];
-  author: {
-    name: string;
-    avatar: string;
-  };
+  author?: Author;
   likes: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
