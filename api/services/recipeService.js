@@ -1,62 +1,77 @@
-// api/services/RecipeService.js
-class RecipeService {
-  constructor(baseUrl = 'http://localhost:3000/api/recipes') {
-    this.baseUrl = baseUrl;
-  }
+import { supabase } from '../config/supabase.js';
 
+export class RecipeService {
   async getAllRecipes() {
-    const response = await fetch(this.baseUrl);
-    if (!response.ok) {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error:', error);
       throw new Error('Failed to fetch recipes');
     }
-    return response.json();
+
+    return data;
   }
 
   async getRecipeById(id) {
-    const response = await fetch(`${this.baseUrl}/${id}`);
-    if (!response.ok) {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Supabase error:', error);
       throw new Error('Failed to fetch recipe');
     }
-    return response.json();
+
+    return data;
   }
 
-  async createRecipe(data) {
-    const response = await fetch(this.baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
+  async createRecipe(recipeData) {
+    const { data, error } = await supabase
+      .from('recipes')
+      .insert([recipeData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error:', error);
       throw new Error('Failed to create recipe');
     }
-    return response.json();
+
+    return data;
   }
 
-  async updateRecipe(id, data) {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
+  async updateRecipe(id, recipeData) {
+    const { data, error } = await supabase
+      .from('recipes')
+      .update(recipeData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error:', error);
       throw new Error('Failed to update recipe');
     }
-    return response.json();
+
+    return data;
   }
 
   async deleteRecipe(id) {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
+    const { error } = await supabase
+      .from('recipes')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Supabase error:', error);
       throw new Error('Failed to delete recipe');
     }
-    return response.json();
+
+    return true;
   }
 }
-
-export default RecipeService;
