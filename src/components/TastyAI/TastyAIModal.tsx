@@ -62,7 +62,7 @@ export const TastyAIModal: React.FC<TastyAIModalProps> = ({ isOpen, onClose }) =
           >
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-xl">
-              <h2 className="text-xl font-bold">👨‍🍳 Tasty AI</h2>
+              <h2 className="text-xl font-bold">👨‍🍳 Tasty AI (In Process)</h2>
               <button
                 onClick={onClose}
                 className="text-white hover:text-orange-100"
@@ -92,6 +92,7 @@ export const TastyAIModal: React.FC<TastyAIModalProps> = ({ isOpen, onClose }) =
                 <input
                   type="text"
                   value={input}
+                  readOnly={true}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me about recipes, ingredients, or cooking tips..."
                   className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"

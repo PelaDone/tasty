@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Minus, Upload } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateRecipeForm: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -13,6 +14,7 @@ export const CreateRecipeForm: React.FC = () => {
   const [instructions, setInstructions] = useState(['']);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddIngredient = () => {
     setIngredients([...ingredients, '']);
@@ -77,6 +79,7 @@ export const CreateRecipeForm: React.FC = () => {
       setDifficulty('Easy');
       setIngredients(['']);
       setInstructions(['']);
+      navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -103,7 +106,7 @@ export const CreateRecipeForm: React.FC = () => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
               required
             />
           </div>
@@ -116,7 +119,7 @@ export const CreateRecipeForm: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
               required
             />
           </div>
@@ -129,7 +132,7 @@ export const CreateRecipeForm: React.FC = () => {
               type="url"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
               required
             />
           </div>
@@ -144,7 +147,7 @@ export const CreateRecipeForm: React.FC = () => {
                 value={cookingTime}
                 onChange={(e) => setCookingTime(e.target.value)}
                 min="1"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
                 required
               />
             </div>
@@ -158,7 +161,7 @@ export const CreateRecipeForm: React.FC = () => {
                 onChange={(e) =>
                   setDifficulty(e.target.value as 'Easy' | 'Medium' | 'Hard')
                 }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
               >
                 <option>Easy</option>
                 <option>Medium</option>
@@ -177,7 +180,7 @@ export const CreateRecipeForm: React.FC = () => {
                   type="text"
                   value={ingredient}
                   onChange={(e) => handleIngredientChange(index, e.target.value)}
-                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                  className="flex-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
                   placeholder="Enter ingredient"
                   required
                 />
@@ -208,7 +211,7 @@ export const CreateRecipeForm: React.FC = () => {
                 <textarea
                   value={instruction}
                   onChange={(e) => handleInstructionChange(index, e.target.value)}
-                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                  className="flex-1 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 appearance-none text-gray-700 border py-2 px-3 mb-3 leading-tight focus:outline-none"
                   placeholder={`Step ${index + 1}`}
                   rows={2}
                   required
