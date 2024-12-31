@@ -21,7 +21,8 @@
     "express-validator": "^7.0.1",
     "@supabase/supabase-js": "^2.39.7",
     "axios": "^1.6.7",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "openai": "^4.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

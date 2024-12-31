@@ -1,161 +1,128 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { UtensilsCrossed, Search, UserCircle, LogOut, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { UtensilsCrossed, UserCircle, LogOut, Menu, User, Bot } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthModal } from './AuthModal';
+import { TastyAIModal } from './TastyAI/TastyAIModal';
 
 export const Header: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleShareRecipe = () => {
-    if (user) {
-      navigate('/create');
-      setIsMobileMenuOpen(false);
-    } else {
-      setIsAuthModalOpen(true);
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setIsMenuOpen(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
+  const handleProfileClick = () => {
+    setIsMenuOpen(false);
+    navigate('/profile');
+  };
+
   return (
-    <>
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex-shrink-0">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-2"
-              >
-                <UtensilsCrossed className="w-8 h-8 text-orange-500" />
-                <h1 className="text-2xl font-bold text-gray-800">Simply Tasty</h1>
-              </motion.div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex flex-1 items-center justify-between ml-8">
-              <div className="w-full max-w-xl">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search recipes..."
-                    className="w-full py-2 px-4 pl-10 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 ml-4">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleShareRecipe}
-                  className="bg-orange-500 text-white px-6 py-2 rounded-full font-medium hover:bg-orange-600 transition-colors"
-                >
-                  Share Recipe
-                </motion.button>
-
-                {user ? (
-                  <div className="flex items-center gap-2">
-                    <UserCircle className="w-8 h-8 text-gray-600" />
-                    <button
-                      onClick={() => signOut()}
-                      className="text-gray-600 hover:text-gray-800"
-                    >
-                      <LogOut className="w-6 h-6" />
-                    </button>
-                  </div>
-                ) : (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsAuthModalOpen(true)}
-                    className="text-gray-600 hover:text-gray-800"
-                  >
-                    <UserCircle className="w-8 h-8" />
-                  </motion.button>
-                )}
-              </div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-gray-600"
+    <header className="relative bg-white shadow-sm">
+      <div className="px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="flex-shrink-0">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2"
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
+              <UtensilsCrossed className="w-8 h-8 text-orange-500" />
+              <h1 className="text-2xl font-bold text-gray-800">Simply Tasty</h1>
+            </motion.div>
+          </Link>
 
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4">
-              <div className="mb-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search recipes..."
-                    className="w-full py-2 px-4 pl-10 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                </div>
-              </div>
+          {/* Tasty AI Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsAIModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full font-medium hover:from-orange-600 hover:to-orange-700 transition-colors"
+          >
+            <Bot className="w-5 h-5" />
+            <span>👨‍🍳 Tasty AI</span>
+          </motion.button>
 
-              <div className="flex flex-col gap-4">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleShareRecipe}
-                  className="w-full bg-orange-500 text-white px-6 py-2 rounded-full font-medium hover:bg-orange-600 transition-colors"
+          <div className="flex items-center gap-4">
+            {user ? (
+              <>
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  Share Recipe
-                </motion.button>
+                  <Menu className="w-6 h-6 text-gray-600" />
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+              >
+                <UserCircle className="w-8 h-8" />
+                <span className="hidden sm:inline">Sign In</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
-                {user ? (
-                  <div className="flex items-center justify-between px-2">
-                    <div className="flex items-center gap-2">
-                      <UserCircle className="w-8 h-8 text-gray-600" />
-                      <span className="text-gray-600">Profile</span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        signOut();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="text-gray-600 hover:text-gray-800"
-                    >
-                      <LogOut className="w-6 h-6" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setIsAuthModalOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="flex items-center gap-2 px-2 text-gray-600 self-center"
-                  >
-                    <UserCircle className="w-8 h-8" />
-                    <span>Sign In</span>
-                  </button>
-                )}
+      {/* Hamburger Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 mr-4"
+          >
+            <div className="px-4 py-2 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <UserCircle className="w-6 h-6 text-gray-600" />
+                <span className="text-sm font-medium text-gray-600">
+                  {user?.email}
+                </span>
               </div>
             </div>
-          )}
-        </div>
-      </header>
+            
+            <button
+              onClick={handleProfileClick}
+              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+            >
+              <User className="w-5 h-5" />
+              Profile
+            </button>
+            
+            <button
+              onClick={handleSignOut}
+              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
-    </>
+
+      <TastyAIModal
+        isOpen={isAIModalOpen}
+        onClose={() => setIsAIModalOpen(false)}
+      />
+    </header>
   );
 };
