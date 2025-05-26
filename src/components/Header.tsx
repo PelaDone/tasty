@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
 
   const handleProfileClick = () => {
     setIsMenuOpen(false);
-    navigate('/profile');
+    // navigate('/profile');
   };
 
   const handleShareRecipe = () => {

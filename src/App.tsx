@@ -3,7 +3,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { CreateRecipe } from './pages/CreateRecipe';
 import { RecipeList } from './components/RecipeList/RecipeList';
-import { Profile } from './pages/Profile';
+// import { Profile } from './pages/Profile';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
               </main>
             } />
             <Route path="/create" element={<CreateRecipe />} />
-            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/profile" element={<Profile />} /> */}
           </Routes>
         </div>
       </Router>
