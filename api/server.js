@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { recipeRouter } from './routes/recipes.js';
+import { authRouter } from './routes/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { env } from './config/env.js';
 
@@ -28,6 +29,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/recipes', recipeRouter);
+app.use('/api/auth', authRouter);
 
 // Error handling
 app.use(errorHandler);

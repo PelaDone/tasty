@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Minus, Upload } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { recipeService } from '../services/recipeService';
 
 export const CreateRecipeForm: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -50,26 +50,15 @@ export const CreateRecipeForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        throw new Error('You must be logged in to create a recipe');
-      }
-
-      const { error: insertError } = await supabase.from('recipes').insert({
+      await recipeService.createRecipe({
         title,
         description,
-        image_url: imageUrl,
-        cooking_time: parseInt(cookingTime),
+        imageUrl,
+        cookingTime: parseInt(cookingTime),
         difficulty,
         ingredients: ingredients.filter(Boolean),
         instructions: instructions.filter(Boolean),
-        author_id: user.id,
       });
-
-      if (insertError) throw insertError;
 
       // Reset form
       setTitle('');
@@ -86,6 +75,7 @@ export const CreateRecipeForm: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

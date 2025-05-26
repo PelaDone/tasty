@@ -1,77 +1,51 @@
-import { supabase } from '../config/supabase.js';
+// In-memory storage for recipes
+const recipes = new Map();
 
 export class RecipeService {
   async getAllRecipes() {
-    const { data, error } = await supabase
-      .from('recipes')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to fetch recipes');
-    }
-
-    return data;
+    return Array.from(recipes.values());
   }
 
   async getRecipeById(id) {
-    const { data, error } = await supabase
-      .from('recipes')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to fetch recipe');
+    const recipe = recipes.get(id);
+    if (!recipe) {
+      throw new Error('Recipe not found');
     }
-
-    return data;
+    return recipe;
   }
 
   async createRecipe(recipeData) {
-    const { data, error } = await supabase
-      .from('recipes')
-      .insert([recipeData])
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to create recipe');
-    }
-
-    return data;
+    const id = crypto.randomUUID();
+    const recipe = {
+      id,
+      ...recipeData,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    recipes.set(id, recipe);
+    return recipe;
   }
 
   async updateRecipe(id, recipeData) {
-    const { data, error } = await supabase
-      .from('recipes')
-      .update(recipeData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to update recipe');
+    const recipe = recipes.get(id);
+    if (!recipe) {
+      throw new Error('Recipe not found');
     }
-
-    return data;
+    const updatedRecipe = {
+      ...recipe,
+      ...recipeData,
+      updated_at: new Date().toISOString()
+    };
+    recipes.set(id, updatedRecipe);
+    return updatedRecipe;
   }
 
   async deleteRecipe(id) {
-    const { error } = await supabase
-      .from('recipes')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error('Failed to delete recipe');
+    const exists = recipes.has(id);
+    if (!exists) {
+      throw new Error('Recipe not found');
     }
-
+    recipes.delete(id);
     return true;
   }
 }
