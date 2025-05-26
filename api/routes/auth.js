@@ -10,14 +10,12 @@ const users = new Map();
 authRouter.post('/signup', async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     if (users.has(email)) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = crypto.randomUUID();
-
     users.set(email, {
       id: userId,
       email,
@@ -25,7 +23,6 @@ authRouter.post('/signup', async (req, res, next) => {
     });
 
     const token = jwt.sign({ userId, email }, 'your-secret-key', { expiresIn: '1h' });
-
     res.status(201).json({
       user: { id: userId, email },
       token
@@ -50,7 +47,6 @@ authRouter.post('/signin', async (req, res, next) => {
     }
 
     const token = jwt.sign({ userId: user.id, email }, 'your-secret-key', { expiresIn: '1h' });
-
     res.json({
       user: { id: user.id, email: user.email },
       token
