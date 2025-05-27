@@ -35,7 +35,7 @@ export const TastyAIModal: React.FC<TastyAIModalProps> = ({ isOpen, onClose }) =
         role: 'assistant',
         content: aiResponse
       }]);
-    } catch (error) {
+    } catch {
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: "I apologize, but I'm having trouble processing your request right now. Please try again later! 🙏"
@@ -92,7 +92,6 @@ export const TastyAIModal: React.FC<TastyAIModalProps> = ({ isOpen, onClose }) =
                 <input
                   type="text"
                   value={input}
-                  readOnly={true}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me about recipes, ingredients, or cooking tips..."
                   className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"

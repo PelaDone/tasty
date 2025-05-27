@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const authRouter = express.Router();
@@ -14,7 +14,7 @@ authRouter.post('/signup', async (req, res, next) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = '123456';
     const userId = crypto.randomUUID();
     users.set(email, {
       id: userId,

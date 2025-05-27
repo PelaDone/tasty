@@ -1,4 +1,4 @@
-import { openai } from '../lib/openai';
+import { hfModel } from '../lib/huggingface';
 import { RateLimiter } from '../lib/rateLimit';
 
 const SYSTEM_PROMPT = `You are Tasty AI, a friendly and knowledgeable cooking assistant. 
@@ -11,31 +11,26 @@ You specialize in:
 Keep responses concise, practical, and engaging. Use emojis occasionally to maintain a friendly tone.
 Always format ingredients in clear lists and steps in numbered format when providing recipes.`;
 
-// Initialize rate limiter with 10 requests per minute
 const rateLimiter = new RateLimiter(10);
 
 export const aiService = {
   async getChatResponse(message: string): Promise<string> {
     try {
-      // Wait for rate limiter before making request
       await rateLimiter.waitForNextRequest();
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      });
+      const formattedPrompt = `[INST] <<SYS>>\n${SYSTEM_PROMPT}\n<</SYS>>\n\n${message} [/INST]`;
 
-      return response.choices[0].message.content || "I'm sorry, I couldn't process that request.";
+      const response = await hfModel.invoke(formattedPrompt);
+      
+      // Limpiar respuesta si es necesario
+      const cleanedResponse = response.replace(/<\/?s>|\[INST\]/g, '').trim();
+      
+      return cleanedResponse || "I'm sorry, I couldn't process that request.";
     } catch (error) {
       if (error instanceof Error && error.message.includes('429')) {
         return "I'm receiving too many requests right now. Please try again in a moment! 🙏";
       }
-      console.error('OpenAI API Error:', error);
+      console.error('Hugging Face API Error:', error);
       throw new Error('Failed to get AI response');
     }
   }
